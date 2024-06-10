@@ -10,6 +10,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { Task } from './tasks/task.entity';
 import { List } from './lists/list.entity';
 import { Board } from './boards/board.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { Board } from './boards/board.entity';
     BoardsModule,
     ListsModule,
     TasksModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
