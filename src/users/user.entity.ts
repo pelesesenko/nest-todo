@@ -24,6 +24,6 @@ export class User {
   @CreateDateColumn()
   registered_at: Date;
 
-  @OneToMany(() => Board, (board) => board.user, { cascade: true })
+  @OneToMany(() => Board, (board) => board.user)
   boards: Board[];
 }

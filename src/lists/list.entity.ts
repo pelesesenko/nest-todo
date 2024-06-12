@@ -9,12 +9,18 @@ export class List extends BaseContent {
   @Column({ type: 'int' })
   rank: number;
 
-  @ManyToOne(() => Board, (board) => board.lists)
+  @ManyToOne(() => Board, (board) => board.lists, { onDelete: 'CASCADE' })
   board: Board;
 
-  @OneToMany(() => Task, (task) => task.list, { cascade: true })
+  @Column()
+  boardId: number;
+
+  @OneToMany(() => Task, (task) => task.list)
   tasks: Task[];
 
   @ManyToOne(() => User)
   user: User;
+
+  @Column()
+  userId: number;
 }

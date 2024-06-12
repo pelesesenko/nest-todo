@@ -8,13 +8,14 @@ import {
   Req,
   Body,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ReqWithUser } from '../helpers/types';
 
 @ApiTags('Users')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
@@ -24,7 +25,7 @@ export class UsersController {
     return this.usersService.getAll();
   }
 
-  // todo: add endpoint for user with entities tree by token
+  // todo: add endpoint for getting user with entities tree by id from token
 
   @Get(':id') // for admins. todo: add roles
   getById(@Param('id') id: string) {

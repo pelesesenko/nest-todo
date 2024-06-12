@@ -8,9 +8,15 @@ export class Board extends BaseContent {
   @Column({ type: 'varchar', length: 300 })
   description: string;
 
-  @ManyToOne(() => User, (user) => user.boards)
+  @ManyToOne(() => User, (user) => user.boards, {
+    onDelete: 'CASCADE',
+    // cascade: true,
+  })
   user: User;
 
-  @OneToMany(() => List, (list) => list.board, { cascade: true })
+  @Column()
+  userId: number;
+
+  @OneToMany(() => List, (list) => list.board)
   lists: List[];
 }

@@ -11,9 +11,15 @@ export class Task extends BaseContent {
   @Column({ type: 'int' })
   rank: number;
 
-  @ManyToOne(() => List, (list) => list.tasks)
+  @ManyToOne(() => List, (list) => list.tasks, { onDelete: 'CASCADE' })
   list: List;
+
+  @Column()
+  listId: number;
 
   @ManyToOne(() => User)
   user: User;
+
+  @Column()
+  userId: number;
 }
