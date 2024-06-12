@@ -2,9 +2,8 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { exceptionFactory } from './helpers/pipes/validation';
-// import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 // import { ValidationPipe } from './helpers/pipes/validation';
 
 const Port = process.env.PORT || 3000;
@@ -23,7 +22,7 @@ async function start() {
 
   SwaggerModule.setup('api/docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({ exceptionFactory, whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ exceptionFactory })); //, whitelist: true
 
   await app.listen(Port, () => console.log('Server started at port ' + Port));
 }

@@ -8,20 +8,24 @@ import {
   Put,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ReqWithUser } from '../helpers/types';
 import { TasksService } from './tasks.service';
 import { TaskDto } from './dto/task.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { MoveTaskDto } from './dto/move-task.dto';
+import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private tasks: TasksService) {}
 
   @Get()
-  getAllByBoard(@Req() req: ReqWithUser, @Query('list') listId: string) {
+  getAllByList(@Req() req: ReqWithUser, @Query('list') listId: string) {
     return this.tasks.getAllByList(req.user.id, Number(listId));
   }
 
@@ -37,10 +41,19 @@ export class TasksController {
   @Put(':id')
   update(
     @Req() req: ReqWithUser,
-    @Param('id') listId: string,
+    @Param('id') taskId: string,
     @Body() dto: TaskDto,
   ) {
-    return this.tasks.update(req.user.id, Number(listId), dto);
+    return this.tasks.update(req.user.id, Number(taskId), dto);
+  }
+
+  @Put(':id/move')
+  move(
+    @Req() req: ReqWithUser,
+    @Param('id') taskId: string,
+    @Body() dto: MoveTaskDto,
+  ) {
+    return this.tasks.move(req.user.id, Number(taskId), dto);
   }
 
   @Delete(':id')

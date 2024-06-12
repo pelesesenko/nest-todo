@@ -15,6 +15,7 @@ import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
 import { ListsService } from './lists.service';
 import { ReqWithUser } from '../helpers/types';
 import { ListDto } from './dto/list.dto';
+import { MoveListDto } from './dto/move-list.dto';
 
 @ApiTags('Lists')
 @ApiBearerAuth()
@@ -44,6 +45,15 @@ export class ListsController {
     @Body() dto: ListDto,
   ) {
     return this.lists.update(req.user.id, Number(listId), dto);
+  }
+
+  @Put(':id/move')
+  move(
+    @Req() req: ReqWithUser,
+    @Param('id') listId: string,
+    @Body() dto: MoveListDto,
+  ) {
+    return this.lists.move(req.user.id, Number(listId), dto);
   }
 
   @Delete(':id')
