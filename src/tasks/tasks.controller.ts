@@ -9,6 +9,7 @@ import {
   Query,
   Req,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ReqWithUser } from '../helpers/types';
 import { TasksService } from './tasks.service';
@@ -29,11 +30,21 @@ export class TasksController {
     return this.tasks.getAllByList(req.user.id, Number(listId));
   }
 
+  @Get(':id')
+  // @ApiQuery({ name: 'tree', required: false })
+  getById(
+    @Req() req: ReqWithUser,
+    @Param('id') listId: string,
+    // @Query('tree') tree?: string | undefined,
+  ) {
+    return this.tasks.getById(req.user.id, Number(listId)); //, !!tree
+  }
+
   @Post()
   addOne(
     @Req() req: ReqWithUser,
     @Query('list') listId: string,
-    @Body() dto: TaskDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: TaskDto,
   ) {
     return this.tasks.addOne(req.user.id, Number(listId), dto);
   }
@@ -42,7 +53,7 @@ export class TasksController {
   update(
     @Req() req: ReqWithUser,
     @Param('id') taskId: string,
-    @Body() dto: TaskDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: TaskDto,
   ) {
     return this.tasks.update(req.user.id, Number(taskId), dto);
   }

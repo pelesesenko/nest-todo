@@ -15,6 +15,11 @@ export class BoardsService {
     return this.repository.findBy({ userId });
   }
 
+  getById(userId: number, id: number, withTree: boolean) {
+    const relations = withTree ? { lists: { tasks: true } } : null;
+    return this.repository.findOne({ where: { userId, id }, relations });
+  }
+
   async addOne(userId: number, dto: BoardDto) {
     const board = this.repository.create({ ...dto, userId });
     return this.repository.save(board);

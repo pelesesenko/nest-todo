@@ -28,10 +28,10 @@ export class TasksService {
 
   private async checkAndGetTask(
     userId: number,
-    listId: number,
+    listId: number | undefined,
     taskId: number,
   ) {
-    await this.checkParent(userId, listId);
+    if (listId) await this.checkParent(userId, listId);
     try {
       return await this.taskRepository.findOneByOrFail({
         userId,
@@ -49,6 +49,11 @@ export class TasksService {
     return this.taskRepository.findBy({ listId });
   }
 
+  getById(userId: number, id: number) {
+    // const relations = withTree ? { tasks: true } : null;
+    return this.taskRepository.findOne({ where: { userId, id } }); //, relations
+  }
+
   async addOne(userId: number, listId: number, dto: TaskDto) {
     await this.checkParent(userId, listId);
     const rank =
@@ -63,8 +68,18 @@ export class TasksService {
   }
 
   async delete(userId: number, id: number) {
+    const task = await this.checkAndGetTask(userId, undefined, id);
     const result = await this.taskRepository.delete({ userId, id });
-    return result?.affected > 0;
+    return result?.affected > 0
+      ? (this.taskRepository
+          .createQueryBuilder()
+          .update()
+          .set({ rank: () => 'rank - 1' })
+          .where('listId = :listId AND id <> :id', { listId: task.listId, id })
+          .andWhere('rank > :rank', { rank: task.rank })
+          .execute(),
+        true)
+      : false;
   }
 
   async move(userId: number, id: number, dto: MoveTaskDto) {

@@ -9,8 +9,9 @@ import {
   Query,
   Req,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
 import { ListsService } from './lists.service';
 import { ReqWithUser } from '../helpers/types';
@@ -25,15 +26,30 @@ export class ListsController {
   constructor(private lists: ListsService) {}
 
   @Get()
-  getAllByBoard(@Req() req: ReqWithUser, @Query('board') boardId: string) {
-    return this.lists.getAllByBoard(req.user.id, Number(boardId));
+  @ApiQuery({ name: 'tree', required: false })
+  getAllByBoard(
+    @Req() req: ReqWithUser,
+    @Query('board') boardId: string,
+    @Query('tree') tree: string,
+  ) {
+    return this.lists.getAllByBoard(req.user.id, Number(boardId), !!tree);
+  }
+
+  @Get(':id')
+  @ApiQuery({ name: 'tree', required: false })
+  getById(
+    @Req() req: ReqWithUser,
+    @Param('id') listId: string,
+    @Query('tree') tree?: string | undefined,
+  ) {
+    return this.lists.getById(req.user.id, Number(listId), !!tree);
   }
 
   @Post()
   addOne(
     @Req() req: ReqWithUser,
     @Query('board') boardId: string,
-    @Body() dto: ListDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: ListDto,
   ) {
     return this.lists.addOne(req.user.id, Number(boardId), dto);
   }
@@ -42,7 +58,7 @@ export class ListsController {
   update(
     @Req() req: ReqWithUser,
     @Param('id') listId: string,
-    @Body() dto: ListDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: ListDto,
   ) {
     return this.lists.update(req.user.id, Number(listId), dto);
   }

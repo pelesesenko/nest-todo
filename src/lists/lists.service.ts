@@ -27,10 +27,10 @@ export class ListsService {
 
   private async checkAndGetList(
     userId: number,
-    boardId: number,
+    boardId: number | undefined,
     listId: number,
   ) {
-    await this.checkParent(userId, boardId);
+    if (boardId) await this.checkParent(userId, boardId);
     try {
       return await this.listRepository.findOneByOrFail({
         userId,
@@ -43,9 +43,15 @@ export class ListsService {
     }
   }
 
-  async getAllByBoard(userId: number, boardId: number) {
+  async getAllByBoard(userId: number, boardId: number, withTree: boolean) {
     await this.checkParent(userId, boardId);
-    return this.listRepository.findBy({ boardId });
+    const relations = withTree ? { tasks: true } : null;
+    return this.listRepository.find({ where: { userId, boardId }, relations });
+  }
+
+  getById(userId: number, id: number, withTree: boolean) {
+    const relations = withTree ? { tasks: true } : null;
+    return this.listRepository.findOne({ where: { userId, id }, relations });
   }
 
   async addOne(userId: number, boardId: number, dto: ListDto) {
@@ -62,8 +68,20 @@ export class ListsService {
   }
 
   async delete(userId: number, id: number) {
+    const list = await this.checkAndGetList(userId, undefined, id);
     const result = await this.listRepository.delete({ userId, id });
-    return result?.affected > 0;
+    return result?.affected > 0
+      ? (this.listRepository
+          .createQueryBuilder()
+          .update()
+          .set({ rank: () => 'rank - 1' })
+          .where('boardId = :boardId', {
+            boardId: list.boardId,
+          })
+          .andWhere('rank > :rank', { rank: list.rank })
+          .execute(),
+        true)
+      : false;
   }
 
   async move(userId: number, id: number, dto: MoveListDto) {
