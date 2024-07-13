@@ -14,9 +14,11 @@ import {
 import { ReqWithUser } from '../helpers/types';
 import { TasksService } from './tasks.service';
 import { TaskDto } from './dto/task.dto';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { MoveTaskDto } from './dto/move-task.dto';
 import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
+import { SetFieldValueDto } from './dto/set-field-value.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()
@@ -31,31 +33,39 @@ export class TasksController {
   }
 
   @Get(':id')
-  // @ApiQuery({ name: 'tree', required: false })
+  @ApiQuery({ name: 'fields', required: false })
   getById(
     @Req() req: ReqWithUser,
-    @Param('id') listId: string,
-    // @Query('tree') tree?: string | undefined,
+    @Param('id') taskId: string,
+    @Query('fields') fields?: string | undefined,
   ) {
-    return this.tasks.getById(req.user.id, Number(listId)); //, !!tree
+    return this.tasks.getById(req.user.id, Number(taskId), !!fields);
   }
 
   @Post()
   addOne(
     @Req() req: ReqWithUser,
-    @Query('list') listId: string,
     @Body(new ValidationPipe({ whitelist: true })) dto: TaskDto,
   ) {
-    return this.tasks.addOne(req.user.id, Number(listId), dto);
+    return this.tasks.addOne(req.user.id, dto);
   }
 
   @Put(':id')
   update(
     @Req() req: ReqWithUser,
     @Param('id') taskId: string,
-    @Body(new ValidationPipe({ whitelist: true })) dto: TaskDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: UpdateTaskDto,
   ) {
     return this.tasks.update(req.user.id, Number(taskId), dto);
+  }
+
+  @Put(':id/set-field-value')
+  setFieldValue(
+    @Req() req: ReqWithUser,
+    @Param('id') taskId: string,
+    @Body(new ValidationPipe({ whitelist: true })) dto: SetFieldValueDto,
+  ) {
+    return this.tasks.setValue(req.user.id, Number(taskId), dto);
   }
 
   @Put(':id/move')

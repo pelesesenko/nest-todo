@@ -10,10 +10,6 @@ import { ValidationError, validate } from 'class-validator';
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
   async transform(value: any, { metatype }: ArgumentMetadata): Promise<any> {
-    // without this pipe throws when trying validate query params
-    // if (!metatype || !this.toValidate(metatype)) {
-    //   return value;
-    // }
     const obj = plainToInstance(metatype, value);
     const errors = await validate(obj);
 
@@ -25,10 +21,6 @@ export class ValidationPipe implements PipeTransform<any> {
     }
     return value;
   }
-  // private toValidate(metatype: Function): boolean {
-  //   const types: Function[] = [String, Boolean, Number, Array, Object];
-  //   return !types.includes(metatype);
-  // }
 }
 
 export const exceptionFactory = (errors: ValidationError[]) => {

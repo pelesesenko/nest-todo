@@ -1,9 +1,13 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { BaseContent } from '../base-entities/base-content';
 import { List } from '../lists/list.entity';
 import { User } from '../users/user.entity';
+import { Field } from '../fields/field.entity';
+import { SelFieldValue } from './sel-field-value.entity';
+import { StrFieldValue } from './str-field-value.entity';
+import { NumFieldValue } from './num-field-values.entity';
 
-@Entity()
+@Entity('tasks')
 export class Task extends BaseContent {
   @Column({ type: 'varchar', length: 300 })
   description: string;
@@ -11,7 +15,9 @@ export class Task extends BaseContent {
   @Column({ type: 'int' })
   rank: number;
 
-  @ManyToOne(() => List, (list) => list.tasks, { onDelete: 'CASCADE' })
+  @ManyToOne(() => List, (list) => list.tasks, {
+    onDelete: 'CASCADE',
+  })
   list: List;
 
   @Column()
@@ -22,4 +28,21 @@ export class Task extends BaseContent {
 
   @Column()
   userId: number;
+
+  @OneToMany(() => SelFieldValue, (sel) => sel.task, {
+    eager: true,
+  })
+  selectValues: SelFieldValue[];
+
+  @OneToMany(() => StrFieldValue, (sel) => sel.task, {
+    eager: true,
+  })
+  stringValues: StrFieldValue[];
+
+  @OneToMany(() => NumFieldValue, (sel) => sel.task, {
+    eager: true,
+  })
+  numberValues: NumFieldValue[];
+  //Чтоб иметь возможность добавить поля в ответ на запрос задачи
+  fields?: Field[];
 }

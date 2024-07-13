@@ -7,7 +7,7 @@ export class MoveTaskDto {
   @Min(1)
   rank: number;
 
-  @ApiProperty({ example: 1, description: 'board move to' })
+  @ApiProperty({ example: 1, description: 'list move to' })
   @IsInt()
   @Min(1)
   listId: number;

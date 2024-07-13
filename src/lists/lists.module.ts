@@ -6,7 +6,7 @@ import { List } from './list.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([List]), AuthModule], //, Board
+  imports: [TypeOrmModule.forFeature([List]), AuthModule],
   providers: [ListsService],
   controllers: [ListsController],
 })

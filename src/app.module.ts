@@ -11,6 +11,11 @@ import { Task } from './tasks/task.entity';
 import { List } from './lists/list.entity';
 import { Board } from './boards/board.entity';
 import { AuthModule } from './auth/auth.module';
+import { Field } from './fields/field.entity';
+import { FieldsModule } from './fields/fields.module';
+import { StrFieldValue } from './tasks/str-field-value.entity';
+import { NumFieldValue } from './tasks/num-field-values.entity';
+import { SelFieldValue } from './tasks/sel-field-value.entity';
 
 @Module({
   imports: [
@@ -24,7 +29,16 @@ import { AuthModule } from './auth/auth.module';
       database: process.env.POSTGRES_DB,
       synchronize: true,
       logging: true,
-      entities: [User, Board, List, Task],
+      entities: [
+        User,
+        Board,
+        List,
+        Task,
+        Field,
+        StrFieldValue,
+        NumFieldValue,
+        SelFieldValue,
+      ],
       subscribers: [],
       migrations: [],
     }),
@@ -33,6 +47,7 @@ import { AuthModule } from './auth/auth.module';
     ListsModule,
     TasksModule,
     AuthModule,
+    FieldsModule,
   ],
 })
 export class AppModule {}

@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/user.entity';
+import { LoginUserDto, RegisterUserDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(dto: CreateUserDto) {
+  async register(dto: RegisterUserDto) {
     const exist = await this.usersService.checkEmail(dto.email);
     if (exist) {
       throw new BadRequestException('User with this email already exists');
@@ -27,18 +27,22 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async login(dto: CreateUserDto) {
+  async login(dto: LoginUserDto) {
     const user = await this.validateUser(dto);
     return this.generateToken(user);
   }
 
   private generateToken(user: User) {
     return {
-      token: this.jwtService.sign({ id: user.id, email: user.email }),
+      token: this.jwtService.sign({
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+      }),
     };
   }
 
-  private async validateUser(dto: CreateUserDto) {
+  private async validateUser(dto: LoginUserDto) {
     const user = await this.usersService.getByEmail(dto.email);
     if (!user) throw new NotFoundException('User not found');
     if (!(await bcrypt.compare(dto.password, user.password))) {

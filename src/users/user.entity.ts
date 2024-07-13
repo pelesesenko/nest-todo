@@ -4,10 +4,16 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Board } from '../boards/board.entity';
 
-@Entity()
+export enum UserRoles {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,8 +27,14 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ type: 'varchar', array: true, default: ['USER'] })
+  roles: UserRoles[];
+
   @CreateDateColumn()
   registered_at: Date;
+
+  @UpdateDateColumn()
+  updated: Date;
 
   @OneToMany(() => Board, (board) => board.user)
   boards: Board[];

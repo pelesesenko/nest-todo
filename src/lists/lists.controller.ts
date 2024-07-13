@@ -17,6 +17,7 @@ import { ListsService } from './lists.service';
 import { ReqWithUser } from '../helpers/types';
 import { ListDto } from './dto/list.dto';
 import { MoveListDto } from './dto/move-list.dto';
+import { UpdateListDto } from './dto/update-list.dto';
 
 @ApiTags('Lists')
 @ApiBearerAuth()
@@ -48,17 +49,16 @@ export class ListsController {
   @Post()
   addOne(
     @Req() req: ReqWithUser,
-    @Query('board') boardId: string,
     @Body(new ValidationPipe({ whitelist: true })) dto: ListDto,
   ) {
-    return this.lists.addOne(req.user.id, Number(boardId), dto);
+    return this.lists.addOne(req.user.id, dto);
   }
 
   @Put(':id')
   update(
     @Req() req: ReqWithUser,
     @Param('id') listId: string,
-    @Body(new ValidationPipe({ whitelist: true })) dto: ListDto,
+    @Body(new ValidationPipe({ whitelist: true })) dto: UpdateListDto,
   ) {
     return this.lists.update(req.user.id, Number(listId), dto);
   }

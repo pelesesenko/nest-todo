@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './board.entity';
@@ -15,9 +15,14 @@ export class BoardsService {
     return this.repository.findBy({ userId });
   }
 
-  getById(userId: number, id: number, withTree: boolean) {
+  async getById(userId: number, id: number, withTree: boolean) {
     const relations = withTree ? { lists: { tasks: true } } : null;
-    return this.repository.findOne({ where: { userId, id }, relations });
+    const result = await this.repository.findOne({
+      where: { userId, id },
+      relations,
+    });
+    if (!result) throw new NotFoundException();
+    return result;
   }
 
   async addOne(userId: number, dto: BoardDto) {

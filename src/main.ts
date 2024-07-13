@@ -22,7 +22,7 @@ async function start() {
 
   SwaggerModule.setup('api/docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({ exceptionFactory })); //, whitelist: true
+  app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
 
   await app.listen(Port, () => console.log('Server started at port ' + Port));
 }
