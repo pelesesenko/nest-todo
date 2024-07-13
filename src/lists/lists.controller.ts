@@ -12,9 +12,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@lib/guards';
 import { ListsService } from './lists.service';
-import { ReqWithUser } from '../helpers/types';
+import { ReqWithUser } from '@lib/interfaces';
 import { ListDto } from './dto/list.dto';
 import { MoveListDto } from './dto/move-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';

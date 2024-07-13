@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
-import { BaseContent } from '../base-entities/base-content';
+import { BaseContent } from '@lib/abstract-classes';
 import { List } from '../lists/list.entity';
 import { User } from '../users/user.entity';
 import { Field } from '../fields/field.entity';

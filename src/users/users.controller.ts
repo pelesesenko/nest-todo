@@ -12,12 +12,12 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
-import { ReqWithUser } from '../helpers/types';
+import { JwtAuthGuard } from '@lib/guards';
+import { ReqWithUser } from '@lib/interfaces';
 import { SetUserRolesDto } from './dto/set-user-roles.dto';
-import { Roles } from '../decorators/roles';
+import { Roles } from '@lib/decorators';
 import { UserRoles } from './user.entity';
-import { RolesGuard } from '../helpers/guards/roles.guard';
+import { RolesGuard } from '@lib/guards';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponse } from './responses';
 

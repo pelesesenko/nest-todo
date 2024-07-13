@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, Validate } from 'class-validator';
-import { IsNumberOrString } from '../../decorators/number-or-string';
+import { IsNumberOrString } from '@lib/constraints';
 
 export class SetFieldValueDto {
   @ApiProperty({ example: 1, description: 'Field id' })

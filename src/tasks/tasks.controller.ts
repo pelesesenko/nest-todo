@@ -11,12 +11,12 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ReqWithUser } from '../helpers/types';
+import { ReqWithUser } from '@lib/interfaces';
 import { TasksService } from './tasks.service';
 import { TaskDto } from './dto/task.dto';
 import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { MoveTaskDto } from './dto/move-task.dto';
-import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@lib/guards';
 import { SetFieldValueDto } from './dto/set-field-value.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 

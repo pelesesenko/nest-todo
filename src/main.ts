@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { exceptionFactory } from './helpers/pipes/validation';
+import { exceptionFactory } from '@lib/pipes';
 import { ValidationPipe } from '@nestjs/common';
 // import { ValidationPipe } from './helpers/pipes/validation';
 

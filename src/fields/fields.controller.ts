@@ -10,8 +10,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
-import { ReqWithUser } from '../helpers/types';
+import { JwtAuthGuard } from '@lib/guards';
+import { ReqWithUser } from '@lib/interfaces';
 import { FieldDto } from './dto/field.dto';
 import { FieldsService } from './fields.service';
 import { UpdateFieldDto } from './dto/update-field.dto';

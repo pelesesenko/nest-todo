@@ -12,10 +12,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { ReqWithUser } from '../helpers/types';
+import { ReqWithUser } from '@lib/interfaces';
 import { BoardDto } from './dto/board.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../helpers/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@lib/guards';
 
 @ApiTags('Boards')
 @ApiBearerAuth()

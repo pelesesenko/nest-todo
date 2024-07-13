@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { FieldTypes } from '../field.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberOrString } from '../../decorators/number-or-string';
+import { IsNumberOrString } from '@lib/constraints';
 
 export class FieldDto {
   @ApiProperty({ example: 1, description: 'Board id' })
