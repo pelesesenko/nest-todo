@@ -5,8 +5,6 @@ import { AppModule } from './app.module';
 import { exceptionFactory } from '@common/pipes';
 import { ValidationPipe } from '@nestjs/common';
 
-// import { ValidationPipe } from './helpers/pipes/validation';
-
 const Port = process.env.PORT || 3000;
 async function start() {
   const app = await NestFactory.create(AppModule);
