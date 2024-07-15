@@ -7,7 +7,7 @@ import {
   IsIn,
   IsInt,
 } from 'class-validator';
-import { UserRoles } from '@common/decorators';
+import { UserRoles } from '@common/interfaces';
 
 export class SetUserRolesDto {
   @ApiProperty({

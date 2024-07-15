@@ -14,7 +14,7 @@ import {
 import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards';
 import { ListsService } from './lists.service';
-import { ReqWithUser } from '../users/interfaces';
+import { ReqWithUser } from '@common/interfaces';
 import { ListDto } from './dto/list.dto';
 import { MoveListDto } from './dto/move-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';

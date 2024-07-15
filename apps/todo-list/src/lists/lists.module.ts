@@ -3,10 +3,10 @@ import { ListsService } from './lists.service';
 import { ListsController } from './lists.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { List } from './list.entity';
-import { AuthModule } from '../auth/auth.module';
+import { JwtAuthModule } from '@common/jwt-auth';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([List]), AuthModule],
+  imports: [TypeOrmModule.forFeature([List]), JwtAuthModule],
   providers: [ListsService],
   controllers: [ListsController],
 })

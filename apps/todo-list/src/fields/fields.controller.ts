@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards';
-import { ReqWithUser } from '../users/interfaces';
+import { ReqWithUser } from '@common/interfaces';
 import { FieldDto } from './dto/field.dto';
 import { FieldsService } from './fields.service';
 import { UpdateFieldDto } from './dto/update-field.dto';

@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { ReqWithUser } from '../users/interfaces';
+import { ReqWithUser } from '@common/interfaces';
 import { BoardDto } from './dto/board.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards';

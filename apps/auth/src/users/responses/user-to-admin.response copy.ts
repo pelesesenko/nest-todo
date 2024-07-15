@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { User } from '../user.entity';
-import { UserRoles } from '@common/decorators';
+import { UserRoles } from '@common/interfaces';
 
 export class UserToAdminResponse implements User {
   id: number;

@@ -3,10 +3,10 @@ import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './task.entity';
-import { AuthModule } from '../auth/auth.module';
+import { JwtAuthModule } from '@common/jwt-auth';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task]), AuthModule],
+  imports: [TypeOrmModule.forFeature([Task]), JwtAuthModule],
   providers: [TasksService],
   controllers: [TasksController],
 })

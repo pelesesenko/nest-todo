@@ -7,7 +7,7 @@ import { User } from './users/user.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: './apps/auth/.env' }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: './apps/auth/.env' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_AUTH_HOST,

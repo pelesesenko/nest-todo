@@ -11,7 +11,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ReqWithUser } from '../users/interfaces';
+import { ReqWithUser } from '@common/interfaces';
 import { TasksService } from './tasks.service';
 import { TaskDto } from './dto/task.dto';
 import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';

@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRoles } from '@common/decorators';
+import { UserRoles } from '@common/interfaces';
 
 @Entity('users')
 export class User {

@@ -1,7 +1,6 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { BaseContent } from '@common/abstract-classes';
 import { List } from '../lists/list.entity';
-import { User } from '../users/user.entity';
 import { Field } from '../fields/field.entity';
 import { SelFieldValue } from './sel-field-value.entity';
 import { StrFieldValue } from './str-field-value.entity';
@@ -22,9 +21,6 @@ export class Task extends BaseContent {
 
   @Column()
   listId: number;
-
-  @ManyToOne(() => User)
-  user: User;
 
   @Column()
   userId: number;

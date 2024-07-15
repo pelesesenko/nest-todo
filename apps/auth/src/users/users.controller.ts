@@ -17,7 +17,7 @@ import { ReqWithUser } from './interfaces';
 
 import { SetUserRolesDto } from './dto/set-user-roles.dto';
 import { Roles } from '@common/decorators';
-import { UserRoles } from '@common/decorators';
+import { UserRoles } from '@common/interfaces';
 import { RolesGuard } from '@common/guards';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponse } from './responses';

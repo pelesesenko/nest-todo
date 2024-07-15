@@ -119,9 +119,6 @@ export class ListsService {
       .select('MAX(list.rank)', 'max')
       .where('list.boardId = :boardId', { boardId: boardFromId })
       .getRawOne();
-    // const maxRankFrom = await this.listRepository.maximum('rank', {
-    //   boardId: boardFromId,
-    // });
     let maxRankTo = maxRankFrom;
     const decrement = (
       start: number,
