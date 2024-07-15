@@ -16,14 +16,14 @@ import { SelFieldValue } from './tasks/sel-field-value.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: './apps/todo/.env' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
+      host: process.env.POSTGRES_TODO_HOST,
+      port: Number(process.env.POSTGRES_TODO_PORT),
+      username: process.env.POSTGRES_TODO_USER,
+      password: process.env.POSTGRES_TODO_PASSWORD,
+      database: process.env.POSTGRES_TODO_DB,
       synchronize: true,
       logging: true,
       entities: [

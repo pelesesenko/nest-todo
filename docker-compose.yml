@@ -1,21 +1,68 @@
-include:
-  - /apps/auth/docker-compose.yml
-  # path:
-  #   - /apps/auth/docker-compose.yml
 services:
+  todo:
+    build:
+      context: .
+      dockerfile: ./apps/todo-list/Dockerfile
+    command: npm run start:dev todo-list
+    env_file:
+      - ./apps/todo-list/.env
+    depends_on:
+      - todo_postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3500:3500'
+    networks:
+      - todo
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+    command: npm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    depends_on:
+      - auth_postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3501:3501'
+    networks:
+      - auth
+
   todo_postgres:
     container_name: todo_postgres
     image: postgres:latest
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_TODO_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_TODO_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_TODO_DB}
     volumes:
       - pg_main:/var/lib/postgresql/data
     ports:
-      - '5430:5432'
+      - '5432:5432'
     networks:
-      - postgres
+      - todo
+      - pgadmin
+    restart: always
+
+  auth_postgres:
+    container_name: auth_postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES_AUTH_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_AUTH_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_AUTH_DB}
+    volumes:
+      - pg_auth:/var/lib/postgresql/data
+    ports:
+      - '5431:5432'
+    networks:
+      - auth
+      - pgadmin
     restart: always
 
   pgadmin:
@@ -29,11 +76,16 @@ services:
     ports:
       - '5050:80'
     networks:
-      - postgres
+      - pgadmin
     restart: always
 volumes:
   pg_main:
+  pg_auth:
   pgadmin:
 networks:
-  postgres:
+  todo:
+    driver: bridge
+  auth:
+    driver: bridge
+  pgadmin:
     driver: bridge

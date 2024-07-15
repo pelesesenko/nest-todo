@@ -11,8 +11,8 @@ async function start() {
   app.setGlobalPrefix('/api');
 
   const config = new DocumentBuilder()
-    .setTitle('Hotels-todo')
-    .setDescription('The Hotels-todo API description')
+    .setTitle('Todo')
+    .setDescription('Todo API description')
     .setVersion('1.0')
     .addTag('Todo')
     .addBearerAuth()
