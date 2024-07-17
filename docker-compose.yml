@@ -8,14 +8,12 @@ services:
       - ./apps/todo-list/.env
     depends_on:
       - todo_postgres
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - '3500:3500'
-    networks:
-      - todo
-
   auth:
     build:
       context: .
@@ -25,13 +23,17 @@ services:
       - ./apps/auth/.env
     depends_on:
       - auth_postgres
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - '3501:3501'
-    networks:
-      - auth
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
 
   todo_postgres:
     container_name: todo_postgres
@@ -44,9 +46,6 @@ services:
       - pg_main:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-    networks:
-      - todo
-      - pgadmin
     restart: always
 
   auth_postgres:
@@ -60,9 +59,6 @@ services:
       - pg_auth:/var/lib/postgresql/data
     ports:
       - '5431:5432'
-    networks:
-      - auth
-      - pgadmin
     restart: always
 
   pgadmin:
@@ -75,17 +71,8 @@ services:
       - pgadmin:/var/lib/pgadmin
     ports:
       - '5050:80'
-    networks:
-      - pgadmin
     restart: always
 volumes:
   pg_main:
   pg_auth:
   pgadmin:
-networks:
-  todo:
-    driver: bridge
-  auth:
-    driver: bridge
-  pgadmin:
-    driver: bridge

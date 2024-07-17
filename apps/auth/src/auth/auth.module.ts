@@ -5,9 +5,9 @@ import { UsersModule } from '../users/users.module';
 import { JwtAuthModule } from '../../../../libs/common/src/jwt-auth';
 
 @Module({
+  imports: [forwardRef(() => UsersModule), JwtAuthModule],
   providers: [AuthService],
   controllers: [AuthController],
-  imports: [forwardRef(() => UsersModule), JwtAuthModule],
   exports: [AuthService],
 })
 export class AuthModule {}

@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { exceptionFactory } from '@common/pipes';
 import { ValidationPipe } from '@nestjs/common';
+import { RMQ_USERS_SERVICE, RmqService } from '@common/rmq';
 
 const Port = process.env.PORT || 3000;
 async function start() {
@@ -20,6 +21,10 @@ async function start() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api/docs', app, document);
+  const rmqService = app.get<RmqService>(RmqService);
+
+  app.connectMicroservice(rmqService.getOptions(RMQ_USERS_SERVICE));
+  await app.startAllMicroservices();
 
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
 

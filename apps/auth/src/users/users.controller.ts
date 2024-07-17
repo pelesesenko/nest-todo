@@ -9,8 +9,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '@common/guards';
 import { ReqWithUser } from './interfaces';
@@ -31,10 +32,20 @@ import { UserToAdminResponse } from './responses/user-to-admin.response copy';
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @UseGuards(JwtAuthGuard)
+  @ApiQuery({ name: 'tree', required: false })
+  @ApiQuery({ name: 'fields', required: false })
   @Get('self')
-  async getSelf(@Req() req: ReqWithUser) {
-    const user = await this.usersService.getById(req.user.id);
-    return new UserResponse(user);
+  async getSelf(
+    @Req() req: ReqWithUser,
+    @Query('tree') tree?: string | undefined,
+    @Query('fields') fields?: string | undefined,
+  ) {
+    const { user, boards } = await this.usersService.getSelf(
+      req.user.id,
+      !!tree,
+      !!fields,
+    );
+    return { user: new UserResponse(user), boards };
   }
 
   @UseGuards(JwtAuthGuard)

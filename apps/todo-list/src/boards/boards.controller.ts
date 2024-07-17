@@ -16,27 +16,51 @@ import { ReqWithUser } from '@common/interfaces';
 import { BoardDto } from './dto/board.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
+import { RmqService } from '@common/rmq';
 
 @ApiTags('Boards')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('boards')
 export class BoardsController {
-  constructor(private boards: BoardsService) {}
+  constructor(
+    private boardsService: BoardsService,
+    private rmqService: RmqService,
+  ) {}
 
   @Get()
-  getAll(@Req() req: ReqWithUser) {
-    return this.boards.getAll(req.user.id);
+  @ApiQuery({ name: 'tree', required: false })
+  @ApiQuery({ name: 'fields', required: false })
+  getAll(
+    @Req() req: ReqWithUser,
+    @Query('tree') tree?: string | undefined,
+    @Query('fields') fields?: string | undefined,
+  ) {
+    return this.boardsService.getAll(req.user.id, !!tree, !!fields);
   }
 
   @Get(':id')
   @ApiQuery({ name: 'tree', required: false })
+  @ApiQuery({ name: 'fields', required: false })
   getById(
     @Req() req: ReqWithUser,
     @Param('id') boardId: string,
     @Query('tree') tree?: string | undefined,
+    @Query('fields') fields?: string | undefined,
   ) {
-    return this.boards.getById(req.user.id, Number(boardId), !!tree);
+    return this.boardsService.getById(
+      req.user.id,
+      Number(boardId),
+      !!tree,
+      !!fields,
+    );
   }
 
   @Post()
@@ -44,7 +68,7 @@ export class BoardsController {
     @Req() req: ReqWithUser,
     @Body(new ValidationPipe({ whitelist: true })) dto: BoardDto,
   ) {
-    return this.boards.addOne(req.user.id, dto);
+    return this.boardsService.addOne(req.user.id, dto);
   }
 
   @Put(':id')
@@ -53,11 +77,26 @@ export class BoardsController {
     @Param('id') boardId: string,
     @Body(new ValidationPipe({ whitelist: true })) dto: BoardDto,
   ) {
-    return this.boards.update(req.user.id, Number(boardId), dto);
+    return this.boardsService.update(req.user.id, Number(boardId), dto);
   }
 
   @Delete(':id')
   delete(@Req() req: ReqWithUser, @Param('id') boardId: string) {
-    return this.boards.delete(req.user.id, Number(boardId));
+    return this.boardsService.delete(req.user.id, Number(boardId));
+  }
+
+  @MessagePattern('get_boards')
+  getBoardIds(
+    @Payload() data: [userId: number, withTree: boolean, withFields: boolean],
+    @Ctx() context: RmqContext,
+  ) {
+    this.rmqService.ack(context);
+    return this.boardsService.getAll(...data);
+  }
+
+  @EventPattern('user_deleted')
+  deletAllByUser(@Payload() userId: number, @Ctx() context: RmqContext) {
+    this.boardsService.deleteAllByUser(userId);
+    this.rmqService.ack(context);
   }
 }

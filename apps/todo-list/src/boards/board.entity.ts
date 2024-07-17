@@ -14,8 +14,6 @@ export class Board extends BaseContent {
   @OneToMany(() => List, (list) => list.board)
   lists: List[];
 
-  @OneToMany(() => Field, (field) => field.board, {
-    eager: true,
-  })
+  @OneToMany(() => Field, (field) => field.board)
   fields: Field[];
 }

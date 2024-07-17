@@ -30,7 +30,7 @@ export class Field {
   @Column({ type: 'int', nullable: true })
   maxIndex: number;
 
-  @ManyToOne(() => Board, (board) => board.fields, { cascade: true })
+  @ManyToOne(() => Board, (board) => board.fields, { onDelete: 'CASCADE' })
   @JoinColumn()
   board: Board;
 

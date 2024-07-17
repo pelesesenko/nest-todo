@@ -11,15 +11,27 @@ export class BoardsService {
     private repository: Repository<Board>,
   ) {}
 
-  getAll(userId: number) {
-    return this.repository.findBy({ userId });
+  getAll(userId: number, withTree: boolean, withFields: boolean) {
+    const tree = withTree ? { lists: { tasks: true } } : {};
+    const fields = withFields ? { fields: true } : {};
+
+    return this.repository.find({
+      where: { userId },
+      relations: { ...tree, ...fields },
+    });
   }
 
-  async getById(userId: number, id: number, withTree: boolean) {
-    const relations = withTree ? { lists: { tasks: true } } : null;
+  async getById(
+    userId: number,
+    id: number,
+    withTree: boolean,
+    withFields: boolean,
+  ) {
+    const tree = withTree ? { lists: { tasks: true } } : {};
+    const fields = withFields ? { fields: true } : {};
     const result = await this.repository.findOne({
       where: { userId, id },
-      relations,
+      relations: { ...tree, ...fields },
     });
     if (!result) throw new NotFoundException();
     return result;
@@ -38,5 +50,9 @@ export class BoardsService {
   async delete(userId: number, id: number) {
     const result = await this.repository.delete({ userId, id });
     return result?.affected > 0;
+  }
+
+  deleteAllByUser(userId: number) {
+    this.repository.delete({ userId });
   }
 }

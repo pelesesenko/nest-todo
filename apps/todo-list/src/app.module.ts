@@ -13,6 +13,7 @@ import { FieldsModule } from './fields/fields.module';
 import { StrFieldValue } from './tasks/str-field-value.entity';
 import { NumFieldValue } from './tasks/num-field-values.entity';
 import { SelFieldValue } from './tasks/sel-field-value.entity';
+import { RmqModule } from '../../../libs/common/src/rmq';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { SelFieldValue } from './tasks/sel-field-value.entity';
     ListsModule,
     TasksModule,
     FieldsModule,
+    RmqModule,
   ],
 })
 export class AppModule {}
